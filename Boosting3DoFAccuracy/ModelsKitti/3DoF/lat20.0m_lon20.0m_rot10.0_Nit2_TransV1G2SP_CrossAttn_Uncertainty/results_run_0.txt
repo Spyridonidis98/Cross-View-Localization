@@ -1,0 +1,160 @@
+====================================
+       EPOCH: 0
+distance within 1 meters (init, pred): 0.1590246488205672 8.375298171216539
+distance within 3 meters (init, pred): 1.7757752451630002 29.499072356215212
+distance within 5 meters (init, pred): 5.486350384309568 41.849986747945934
+------------------------
+lateral within 1 meters (init, pred): 4.8767558971640605 59.60773919957594
+lateral within 3 meters (init, pred): 15.08083752981712 90.0344553405778
+lateral within 5 meters (init, pred): 25.2054068380599 95.25576464351974
+longitudinal within 1 meters (init, pred): 4.770739464617016 13.411078717201166
+longitudinal within 3 meters (init, pred): 15.663927908825867 32.865094089583884
+longitudinal within 5 meters (init, pred): 25.39093559501723 43.28120858733104
+angle within 1 degrees (init, pred): 9.96554465942221 85.18420355155048
+angle within 3 degrees (init, pred): 30.426716141001855 99.94699178372647
+angle within 5 degrees (init, pred): 49.93373972965809 100.0
+====================================
+====================================
+       EPOCH: 0
+distance within 1 meters (init, pred): 0.17236807212940866 3.9909838239193847
+distance within 3 meters (init, pred): 2.015380535666932 19.451073985680193
+distance within 5 meters (init, pred): 5.515778308141077 30.257226199946963
+------------------------
+lateral within 1 meters (init, pred): 5.0517104216388224 45.14717581543357
+lateral within 3 meters (init, pred): 15.446831079289314 77.53911429329091
+lateral within 5 meters (init, pred): 25.590029169981438 85.52108194112968
+longitudinal within 1 meters (init, pred): 5.224078493768231 9.400689472288517
+longitudinal within 3 meters (init, pred): 15.804826306019622 23.972421108459294
+longitudinal within 5 meters (init, pred): 25.563511005038453 34.354282683638296
+angle within 1 degrees (init, pred): 9.997348183505702 86.52877220896315
+angle within 3 degrees (init, pred): 30.27048528241846 100.0
+angle within 5 degrees (init, pred): 50.092813577300454 100.0
+====================================
+====================================
+       EPOCH: 1
+distance within 1 meters (init, pred): 0.1590246488205672 12.536443148688047
+distance within 3 meters (init, pred): 1.7757752451630002 39.888682745825605
+distance within 5 meters (init, pred): 5.486350384309568 52.1865889212828
+------------------------
+lateral within 1 meters (init, pred): 4.8767558971640605 70.36840710310098
+lateral within 3 meters (init, pred): 15.08083752981712 95.12324410283594
+lateral within 5 meters (init, pred): 25.2054068380599 97.90617545719587
+longitudinal within 1 meters (init, pred): 4.770739464617016 18.42035515504903
+longitudinal within 3 meters (init, pred): 15.663927908825867 41.90299496421945
+longitudinal within 5 meters (init, pred): 25.39093559501723 53.40577789557381
+angle within 1 degrees (init, pred): 9.96554465942221 93.95706334481845
+angle within 3 degrees (init, pred): 30.426716141001855 100.0
+angle within 5 degrees (init, pred): 49.93373972965809 100.0
+====================================
+====================================
+       EPOCH: 1
+distance within 1 meters (init, pred): 0.17236807212940866 7.3587907716786
+distance within 3 meters (init, pred): 2.015380535666932 28.122513922036596
+distance within 5 meters (init, pred): 5.515778308141077 40.41368337311058
+------------------------
+lateral within 1 meters (init, pred): 5.0517104216388224 57.21294086449218
+lateral within 3 meters (init, pred): 15.446831079289314 87.05913550782286
+lateral within 5 meters (init, pred): 25.590029169981438 92.53513656854946
+longitudinal within 1 meters (init, pred): 5.224078493768231 13.617077698223282
+longitudinal within 3 meters (init, pred): 15.804826306019622 31.596393529567752
+longitudinal within 5 meters (init, pred): 25.563511005038453 42.80031821797932
+angle within 1 degrees (init, pred): 9.997348183505702 92.72076372315036
+angle within 3 degrees (init, pred): 30.27048528241846 100.0
+angle within 5 degrees (init, pred): 50.092813577300454 100.0
+====================================
+====================================
+       EPOCH: 2
+distance within 1 meters (init, pred): 0.1590246488205672 13.46408693347469
+distance within 3 meters (init, pred): 1.7757752451630002 42.27405247813411
+distance within 5 meters (init, pred): 5.486350384309568 54.78399151868539
+------------------------
+lateral within 1 meters (init, pred): 4.8767558971640605 71.32255499602438
+lateral within 3 meters (init, pred): 15.08083752981712 95.46779750861384
+lateral within 5 meters (init, pred): 25.2054068380599 98.11820832228996
+longitudinal within 1 meters (init, pred): 4.770739464617016 19.480519480519483
+longitudinal within 3 meters (init, pred): 15.663927908825867 44.55340577789557
+longitudinal within 5 meters (init, pred): 25.39093559501723 55.79114762788232
+angle within 1 degrees (init, pred): 9.96554465942221 96.15690432016962
+angle within 3 degrees (init, pred): 30.426716141001855 100.0
+angle within 5 degrees (init, pred): 49.93373972965809 100.0
+====================================
+====================================
+       EPOCH: 2
+distance within 1 meters (init, pred): 0.17236807212940866 7.650490586051445
+distance within 3 meters (init, pred): 2.015380535666932 30.54892601431981
+distance within 5 meters (init, pred): 5.515778308141077 43.34394059931053
+------------------------
+lateral within 1 meters (init, pred): 5.0517104216388224 58.75099443118537
+lateral within 3 meters (init, pred): 15.446831079289314 87.84142137364096
+lateral within 5 meters (init, pred): 25.590029169981438 92.77380005303633
+longitudinal within 1 meters (init, pred): 5.224078493768231 14.293290904269423
+longitudinal within 3 meters (init, pred): 15.804826306019622 33.92999204455052
+longitudinal within 5 meters (init, pred): 25.563511005038453 45.08088040307611
+angle within 1 degrees (init, pred): 9.997348183505702 96.26093874303898
+angle within 3 degrees (init, pred): 30.27048528241846 100.0
+angle within 5 degrees (init, pred): 50.092813577300454 100.0
+====================================
+====================================
+       EPOCH: 3
+distance within 1 meters (init, pred): 0.1590246488205672 16.114497747150807
+distance within 3 meters (init, pred): 1.7757752451630002 46.673734428836475
+distance within 5 meters (init, pred): 5.486350384309568 58.91863238802014
+------------------------
+lateral within 1 meters (init, pred): 4.8767558971640605 76.62337662337663
+lateral within 3 meters (init, pred): 15.08083752981712 96.07739199575934
+lateral within 5 meters (init, pred): 25.2054068380599 98.7012987012987
+longitudinal within 1 meters (init, pred): 4.770739464617016 21.6538563477339
+longitudinal within 3 meters (init, pred): 15.663927908825867 48.316989133315666
+longitudinal within 5 meters (init, pred): 25.39093559501723 59.793267956533256
+angle within 1 degrees (init, pred): 9.96554465942221 98.9133315663928
+angle within 3 degrees (init, pred): 30.426716141001855 100.0
+angle within 5 degrees (init, pred): 49.93373972965809 100.0
+====================================
+====================================
+       EPOCH: 3
+distance within 1 meters (init, pred): 0.17236807212940866 8.936621585786265
+distance within 3 meters (init, pred): 2.015380535666932 32.909042694245564
+distance within 5 meters (init, pred): 5.515778308141077 45.06762132060461
+------------------------
+lateral within 1 meters (init, pred): 5.0517104216388224 58.56536727658445
+lateral within 3 meters (init, pred): 15.446831079289314 87.25802174489526
+lateral within 5 meters (init, pred): 25.590029169981438 92.54839565102095
+longitudinal within 1 meters (init, pred): 5.224078493768231 16.070007955449483
+longitudinal within 3 meters (init, pred): 15.804826306019622 36.30336780694776
+longitudinal within 5 meters (init, pred): 25.563511005038453 47.321665340758415
+angle within 1 degrees (init, pred): 9.997348183505702 99.11164147440998
+angle within 3 degrees (init, pred): 30.27048528241846 100.0
+angle within 5 degrees (init, pred): 50.092813577300454 100.0
+====================================
+====================================
+       EPOCH: 4
+distance within 1 meters (init, pred): 0.1590246488205672 18.287834614365224
+distance within 3 meters (init, pred): 1.7757752451630002 50.33130135170951
+distance within 5 meters (init, pred): 5.486350384309568 61.96660482374769
+------------------------
+lateral within 1 meters (init, pred): 4.8767558971640605 79.56533262655712
+lateral within 3 meters (init, pred): 15.08083752981712 96.68698648290484
+lateral within 5 meters (init, pred): 25.2054068380599 98.93983567452955
+longitudinal within 1 meters (init, pred): 4.770739464617016 23.88020143122184
+longitudinal within 3 meters (init, pred): 15.663927908825867 51.73601908295786
+longitudinal within 5 meters (init, pred): 25.39093559501723 62.708719851577
+angle within 1 degrees (init, pred): 9.96554465942221 98.86032335011927
+angle within 3 degrees (init, pred): 30.426716141001855 100.0
+angle within 5 degrees (init, pred): 49.93373972965809 100.0
+====================================
+====================================
+       EPOCH: 4
+distance within 1 meters (init, pred): 0.17236807212940866 8.16759480243967
+distance within 3 meters (init, pred): 2.015380535666932 32.68363829223018
+distance within 5 meters (init, pred): 5.515778308141077 45.14717581543357
+------------------------
+lateral within 1 meters (init, pred): 5.0517104216388224 57.39856801909308
+lateral within 3 meters (init, pred): 15.446831079289314 87.25802174489526
+lateral within 5 meters (init, pred): 25.590029169981438 92.74728188809334
+longitudinal within 1 meters (init, pred): 5.224078493768231 15.552903739061257
+longitudinal within 3 meters (init, pred): 15.804826306019622 36.555290373906125
+longitudinal within 5 meters (init, pred): 25.563511005038453 47.42773800053036
+angle within 1 degrees (init, pred): 9.997348183505702 99.16467780429595
+angle within 3 degrees (init, pred): 30.27048528241846 100.0
+angle within 5 degrees (init, pred): 50.092813577300454 100.0
+====================================

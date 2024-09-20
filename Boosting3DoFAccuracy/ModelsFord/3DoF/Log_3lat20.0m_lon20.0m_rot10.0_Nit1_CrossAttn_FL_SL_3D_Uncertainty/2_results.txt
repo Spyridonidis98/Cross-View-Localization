@@ -1,0 +1,39 @@
+trained and tested on logs 3,4,5 len of dataset: 17396
+
+====================================
+       EPOCH: 0
+Time per image (second): 0.2855590599962301
+distance within 1 meters (init, pred): 0.15274350840089296 14.075901774174598
+distance within 3 meters (init, pred): 1.7859240982258253 44.98883797438609
+distance within 5 meters (init, pred): 5.616261308894372 55.97462107860416
+------------------------
+lateral      within 1 meters (init, pred): 4.735048760427682 53.63647045000588
+longitudinal within 1 meters (init, pred): 4.864293267536129 27.09434849018917
+lateral      within 3 meters (init, pred): 15.638585360122196 90.01292445071084
+longitudinal within 3 meters (init, pred): 14.96886382328751 50.499353777464464
+lateral      within 5 meters (init, pred): 25.17917988485489 96.56914581130302
+longitudinal within 5 meters (init, pred): 25.108682880977558 57.06732463870286
+------------------------
+angle within 1 degrees (init, pred): 9.822582540242038 25.461167900364234
+angle within 3 degrees (init, pred): 30.548701680178592 79.9201033956057
+angle within 5 degrees (init, pred): 49.900129244507106 95.17095523440254
+====================================
+====================================
+       EPOCH: 1
+Time per image (second): 0.2886842048738247
+distance within 1 meters (init, pred): 0.15274350840089296 20.643872635412993
+distance within 3 meters (init, pred): 1.7859240982258253 54.576430501703676
+distance within 5 meters (init, pred): 5.616261308894372 67.35988720479381
+------------------------
+lateral      within 1 meters (init, pred): 4.735048760427682 59.92245329573493
+longitudinal within 1 meters (init, pred): 4.864293267536129 33.309834332040886
+lateral      within 3 meters (init, pred): 15.638585360122196 92.31582657737046
+longitudinal within 3 meters (init, pred): 14.96886382328751 60.86241334743273
+lateral      within 5 meters (init, pred): 25.17917988485489 98.17882739983551
+longitudinal within 5 meters (init, pred): 25.108682880977558 68.01785924098226
+------------------------
+angle within 1 degrees (init, pred): 9.822582540242038 63.623545999295025
+angle within 3 degrees (init, pred): 30.548701680178592 90.60039948302197
+angle within 5 degrees (init, pred): 49.900129244507106 95.48819175185055
+====================================
+training time 1600 minutes

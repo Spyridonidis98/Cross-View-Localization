@@ -1,0 +1,91 @@
+====================================
+       EPOCH: 0
+Time per image (second): 0.2886313977695647
+distance within 1 meters (init, pred): 0.14285714285714285 3.6666666666666665
+distance within 3 meters (init, pred): 1.8095238095238095 13.238095238095237
+distance within 5 meters (init, pred): 5.571428571428571 18.333333333333332
+------------------------
+lateral      within 1 meters (init, pred): 4.857142857142857 71.80952380952381
+longitudinal within 1 meters (init, pred): 4.428571428571428 5.952380952380952
+lateral      within 3 meters (init, pred): 15.857142857142856 89.52380952380953
+longitudinal within 3 meters (init, pred): 14.523809523809526 14.285714285714285
+lateral      within 5 meters (init, pred): 25.380952380952383 94.04761904761905
+longitudinal within 5 meters (init, pred): 25.047619047619047 19.380952380952383
+------------------------
+angle within 1 degrees (init, pred): 9.857142857142858 27.76190476190476
+angle within 3 degrees (init, pred): 29.761904761904763 83.0
+angle within 5 degrees (init, pred): 49.80952380952381 94.66666666666667
+====================================
+====================================
+       EPOCH: 1
+Time per image (second): 0.2863146129108611
+distance within 1 meters (init, pred): 0.14285714285714285 7.380952380952381
+distance within 3 meters (init, pred): 1.8095238095238095 17.476190476190474
+distance within 5 meters (init, pred): 5.571428571428571 22.857142857142858
+------------------------
+lateral      within 1 meters (init, pred): 4.857142857142857 85.04761904761905
+longitudinal within 1 meters (init, pred): 4.428571428571428 9.238095238095239
+lateral      within 3 meters (init, pred): 15.857142857142856 96.23809523809524
+longitudinal within 3 meters (init, pred): 14.523809523809526 17.952380952380953
+lateral      within 5 meters (init, pred): 25.380952380952383 97.57142857142857
+longitudinal within 5 meters (init, pred): 25.047619047619047 23.0
+------------------------
+angle within 1 degrees (init, pred): 9.857142857142858 48.142857142857146
+angle within 3 degrees (init, pred): 29.761904761904763 90.0952380952381
+angle within 5 degrees (init, pred): 49.80952380952381 95.95238095238095
+====================================
+====================================
+       EPOCH: 2
+Time per image (second): 0.2857421184721447
+distance within 1 meters (init, pred): 0.14285714285714285 10.476190476190476
+distance within 3 meters (init, pred): 1.8095238095238095 22.714285714285715
+distance within 5 meters (init, pred): 5.571428571428571 25.380952380952383
+------------------------
+lateral      within 1 meters (init, pred): 4.857142857142857 81.80952380952381
+longitudinal within 1 meters (init, pred): 4.428571428571428 14.904761904761903
+lateral      within 3 meters (init, pred): 15.857142857142856 95.85714285714285
+longitudinal within 3 meters (init, pred): 14.523809523809526 23.238095238095237
+lateral      within 5 meters (init, pred): 25.380952380952383 97.14285714285714
+longitudinal within 5 meters (init, pred): 25.047619047619047 25.80952380952381
+------------------------
+angle within 1 degrees (init, pred): 9.857142857142858 71.9047619047619
+angle within 3 degrees (init, pred): 29.761904761904763 90.47619047619048
+angle within 5 degrees (init, pred): 49.80952380952381 93.66666666666667
+====================================
+====================================
+       EPOCH: 3
+Time per image (second): 0.2851854428790864
+distance within 1 meters (init, pred): 0.14285714285714285 11.80952380952381
+distance within 3 meters (init, pred): 1.8095238095238095 24.571428571428573
+distance within 5 meters (init, pred): 5.571428571428571 26.476190476190474
+------------------------
+lateral      within 1 meters (init, pred): 4.857142857142857 80.0952380952381
+longitudinal within 1 meters (init, pred): 4.428571428571428 17.142857142857142
+lateral      within 3 meters (init, pred): 15.857142857142856 95.0
+longitudinal within 3 meters (init, pred): 14.523809523809526 24.952380952380953
+lateral      within 5 meters (init, pred): 25.380952380952383 96.52380952380952
+longitudinal within 5 meters (init, pred): 25.047619047619047 26.904761904761905
+------------------------
+angle within 1 degrees (init, pred): 9.857142857142858 75.47619047619048
+angle within 3 degrees (init, pred): 29.761904761904763 90.23809523809524
+angle within 5 degrees (init, pred): 49.80952380952381 93.52380952380952
+====================================
+====================================
+       EPOCH: 4
+Time per image (second): 0.2861528138887315
+distance within 1 meters (init, pred): 0.14285714285714285 11.666666666666666
+distance within 3 meters (init, pred): 1.8095238095238095 25.428571428571427
+distance within 5 meters (init, pred): 5.571428571428571 27.57142857142857
+------------------------
+lateral      within 1 meters (init, pred): 4.857142857142857 78.95238095238095
+longitudinal within 1 meters (init, pred): 4.428571428571428 17.523809523809526
+lateral      within 3 meters (init, pred): 15.857142857142856 94.71428571428572
+longitudinal within 3 meters (init, pred): 14.523809523809526 25.857142857142858
+lateral      within 5 meters (init, pred): 25.380952380952383 96.47619047619047
+longitudinal within 5 meters (init, pred): 25.047619047619047 27.95238095238095
+------------------------
+angle within 1 degrees (init, pred): 9.857142857142858 76.66666666666667
+angle within 3 degrees (init, pred): 29.761904761904763 89.80952380952381
+angle within 5 degrees (init, pred): 49.80952380952381 93.33333333333333
+====================================
+training took 940 minutes

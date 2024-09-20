@@ -1,0 +1,49 @@
+please use linux for the love of god 
+
+in this example will be using python 3.8 with kafka 3.5
+also tester python 3.10 works fine 
+
+--for kafka to work java must be installed !
+sudo apt update
+sudo apt install default-jre default-jdk
+java -version
+
+--download kafka in a folder of choice 
+wget https://archive.apache.org/dist/kafka/3.5.2/kafka_2.13-3.5.2.tgz
+
+--unzip the downloaded folder and cd into that folder 
+tar -xzf kafka_2.13-3.5.2.tgz
+cd kafka_2.13-3.5.2
+
+
+
+--open a new terminal in that folder and start zookeper 
+
+
+
+--after starting zookeeper open a new terminal in that folder and start kafka server 
+bin/kafka-server-start.sh config/server.properties
+
+# ! pip install kafka-python, and run the tutorials
+
+
+
+--open a new terminal in that folder, 
+--create first topic at localhost:9092 which is the default port for kafka 
+bin/kafka-topics.sh --create --topic my_first_topic --bootstrap-server localhost:9092
+
+--producer write some events to the topic 
+bin/kafka-console-producer.sh --topic my_first_topic --bootstrap-server localhost:9092
+>first event 
+>second event 
+>third event 
+CTRL+C to exit 
+
+--consumer read the events from start 
+bin/kafka-console-consumer.sh --topic my_first_topic --from-beginning --bootstrap-server localhost:9092
+
+--delete topic 
+bin/kafka-topics.sh --delete --topic my_first_topic --bootstrap-server localhost:9092
+
+
+--stop zookeeper and kafka 
