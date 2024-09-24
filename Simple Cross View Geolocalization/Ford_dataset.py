@@ -21,8 +21,8 @@ satmap_dir = 'SatelliteMaps_18'
 data_file = 'grd_sat_quaternion_latlon.txt'
 data_file_test = 'grd_sat_quaternion_latlon_test.txt'
 pose_file_dir = 'Calibration-V2/V2/'
-cameras_ex = {'FL':'cameraFrontLeft_body.yaml', 'SL': 'cameraSideLeft_body.yaml'}
-cameras_in = {'FL':'cameraFrontLeftIntrinsics.yaml', 'SL': 'cameraSideLeftIntrinsics.yaml'} 
+cameras_ex = {'FL':'cameraFrontLeft_body.yaml', 'SL': 'cameraSideLeft_body.yaml', 'SR': 'cameraSideRight_body.yaml', 'RL':'cameraRearLeft_body.yaml'}
+cameras_in = {'FL':'cameraFrontLeftIntrinsics.yaml', 'SL': 'cameraSideLeftIntrinsics.yaml', 'SR':'cameraSideRightIntrinsics.yaml', 'RL':'cameraRearLeftIntrinsics.yaml'} 
 
 train_logs = [
               '2017-10-26/V2/Log1',
@@ -233,7 +233,7 @@ class SatGrdDatasetFord(Dataset):
 
     def __getitem__(self, idx):
         # read cemera k matrix from camera calibration files, day_dir is first 10 chat of file name
-        grd_imgs =[]; grd_names = []
+        grd_imgs = []; grd_names = []
         first_cam = tuple(self.file_names.keys())[0]
 
         if self.mode == 'train':

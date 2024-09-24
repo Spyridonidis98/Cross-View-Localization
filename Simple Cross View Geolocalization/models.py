@@ -3,11 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class SimpleBlock(nn.Module):
-    def __init__(self, c_in, c_out, height, width) -> None:
+    def __init__(self, c_in, c_out, height = None, width = None) -> None:
         super().__init__()
         self.layer = nn.Sequential(
             nn.Conv2d(c_in, c_out, kernel_size=3, padding=1, bias=False),
-            nn.LayerNorm([c_out, height, width]),
+            # nn.LayerNorm([c_out, height, width]),
+            nn.BatchNorm2d(c_out),
             nn.ReLU()
         )
 
@@ -15,14 +16,16 @@ class SimpleBlock(nn.Module):
         return self.layer(x)
 
 class ResidualBlock(nn.Module):
-    def __init__(self, channels, height, width) -> None:
+    def __init__(self, channels, height = None, width = None) -> None:
         super().__init__()
         self.layer = nn.Sequential(
             nn.Conv2d(channels, channels, kernel_size=3, padding=1, bias=False),
-            nn.LayerNorm([channels, height, width]),
+            # nn.LayerNorm([channels, height, width]),
+            nn.BatchNorm2d(channels),
             nn.ReLU(),
+            # nn.LayerNorm([channels, height, width]),
             nn.Conv2d(channels, channels, kernel_size=3, padding=1, bias=False),
-            nn.LayerNorm([channels, height, width]),
+            nn.BatchNorm2d(channels),
         )
         
     def forward(self, x):
@@ -33,7 +36,7 @@ class ResidualBlock(nn.Module):
     
 
 class ForwardBlock(nn.Module):
-    def __init__(self, c_in, c_out, height, width, resblocks=1) -> None:
+    def __init__(self, c_in, c_out, height = None, width = None, resblocks=1) -> None:
         super().__init__()
 
         self.simple_block = SimpleBlock(c_in, c_out, height, width)
@@ -46,7 +49,7 @@ class ForwardBlock(nn.Module):
 
 
 class DownBlock(nn.Module):
-    def __init__(self, c_in, c_out, height, width, resblocks=1) -> None:
+    def __init__(self, c_in, c_out, height = None, width = None, resblocks=1) -> None:
         super().__init__()
         self.forward_block = ForwardBlock(c_in, c_out, height, width, resblocks)
         self.max_pool2d = nn.MaxPool2d(2)
@@ -57,7 +60,7 @@ class DownBlock(nn.Module):
         return x
 
 class UpBlock(nn.Module):
-    def __init__(self, c_in, c_out, height, width, resblocks=1) -> None:
+    def __init__(self, c_in, c_out, height = None, width = None, resblocks=1) -> None:
         super().__init__()
         self.forward_block = ForwardBlock(c_in, c_out, height, width, resblocks)
         self.up_sample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners = True)
