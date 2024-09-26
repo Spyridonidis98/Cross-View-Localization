@@ -304,11 +304,11 @@ class SatGrdDatasetFord(Dataset):
         theta = torch.tensor(theta, dtype=torch.float32)
         xy_dt_mask, xy_dt = satimgtrans2satimgorig(gt_shift_v, gt_shift_u, theta, self.shift_range_meters_lat, self.shift_range_meters_lon, self.rotation_range)
 
-        return sat_img, \
-               tuple(grd_imgs), \
-               gt_shift_u, \
-               gt_shift_v, \
-               theta, \
+        return sat_img,\
+               tuple(grd_imgs),\
+               gt_shift_u,\
+               gt_shift_v,\
+               theta,\
                tuple(grd_names), sat_img_norot_notrans, xy_dt_mask, xy_dt
                #self.satmap_transform(sat_align_body_loc_orien), self.satmap_transform(sat_rand_shift), self.satmap_transform(sat_rand_shift_rot) 
                
