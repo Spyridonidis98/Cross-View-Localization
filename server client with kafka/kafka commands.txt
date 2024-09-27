@@ -1,7 +1,7 @@
 please use linux for the love of god 
 
 in this example will be using python 3.8 with kafka 3.5
-also tester python 3.10 works fine 
+also tested python 3.10 works fine 
 
 --for kafka to work java must be installed !
 sudo apt update
@@ -18,7 +18,7 @@ cd kafka_2.13-3.5.2
 
 
 --open a new terminal in that folder and start zookeper 
-
+bin/zookeeper-server-start.sh config/zookeeper.properties
 
 
 --after starting zookeeper open a new terminal in that folder and start kafka server 
