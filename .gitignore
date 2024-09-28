@@ -4,5 +4,6 @@
 *.docx
 *.tmp
 *.pptx
+*.gz
 Uncertainty-aware Vision-based Metric Cross-view Geolocalization/
 kafka/
