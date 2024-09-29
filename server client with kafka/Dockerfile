@@ -4,7 +4,7 @@ RUN apt-get update && apt-get upgrade -y
 
 # Install packages
 RUN apt-get install -y python3 python3-pip git wget
-RUN pip3 install numpy matplotlib kafka-python dropbox msgpack simplejpeg pandas scipy timm tk
+RUN pip3 install numpy matplotlib kafka-python dropbox msgpack simplejpeg pandas scipy cv2 timm tk
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install python3-tk -y 
 RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
