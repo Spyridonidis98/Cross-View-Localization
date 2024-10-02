@@ -302,7 +302,7 @@ class SatGrdDatasetFord(Dataset):
         gt_shift_u = torch.tensor(gt_shift_u, dtype=torch.float32)
         gt_shift_v = torch.tensor(gt_shift_v, dtype=torch.float32)
         theta = torch.tensor(theta, dtype=torch.float32)
-        xy_dt_mask, xy_dt = satimgtrans2satimgorig(gt_shift_v, gt_shift_u, theta, self.shift_range_meters_lat, self.shift_range_meters_lon, self.rotation_range)
+        xy_dt_mask, xy_dt = satimgtrans2satimgorig(gt_shift_v, gt_shift_u, theta, self.shift_range_meters_lat, self.shift_range_meters_lon, self.rotation_range, self.Rs, self.Ts, self.Ks, self.H, self.W)
 
         return sat_img,\
                tuple(grd_imgs),\
@@ -314,6 +314,7 @@ class SatGrdDatasetFord(Dataset):
                
 
 def get_xy_map(sidelength):
+    # shape: (2, sidelength, sidelength)
     meters_range = (torch.arange(sidelength) / (sidelength - 1))-0.5
     meters_y = meters_range.repeat(sidelength, 1)
     meters_x = meters_y.transpose(0,1)
@@ -321,9 +322,119 @@ def get_xy_map(sidelength):
 
     return meters_xy
 
+def get_xyz_map(sidelength):
+    # x,y axis range [-56.3, 56.3] 
+    # shape: (sidelength, sidelength, 1, 3)
+
+    x = torch.arange(sidelength).flip(dims=[0]) / (sidelength-1) - 0.5; x=x*56.3*2
+    x = x.repeat(sidelength, 1).T
+
+    y = torch.arange(sidelength) / (sidelength-1) -0.5; y=y*56.3*2
+    y = y.repeat(sidelength, 1)
+
+    z = torch.zeros_like(x); z[:,:] = 1.4 #for z=+1.4 we are at the level of the ground
+
+    xyz = torch.stack((x, y, z), dim=-1)
+    
+    return xyz[:,:,None,:]
+
+def get_xyz_ids(sidelength):
+    # shape: (sidelength, sidelength, 1, 3)
+    x_id = torch.arange(sidelength) 
+    x_id = x_id.repeat(sidelength, 1).T
+
+    y_id = torch.arange(sidelength) 
+    y_id = y_id.repeat(sidelength, 1)
+
+    z_id = torch.zeros_like(x_id)
+
+    xyz_ids = torch.stack((x_id, y_id, z_id), dim=-1)
+
+    return xyz_ids[:,:,None,:]
+
+def render_xyz(R, T, K, xyz, xyz_ids, H=448, W=896):
+    '''
+    scatter_ids 3,n
+    uvs:2,n
+    '''
+    xyz_cam = R.T @ xyz.view(-1, 3).T - T.unsqueeze(1)
+    uvs = K @ xyz_cam
+    uvs[0] = uvs[0]/ uvs[2]
+    uvs[1] = uvs[1]/ uvs[2]
+
+    bf = (uvs[0, :] >= 0) & (uvs[1, :] >= 0) & (uvs[0, :] < W-1) & (uvs[1, :]< H-1) & (uvs[2, :] > 0.1)
+    uvs = uvs[:, bf]
+    scatter_ids = xyz_ids.view(-1, 3).T[:, bf]
+
+    return uvs, scatter_ids
+
+def lift_features(img, volume, uvs, scatter_ids):
+    gather_ids = torch.zeros_like(uvs)
+    gather_ids[0, :] = uvs[1, :]
+    gather_ids[1, :] = uvs[0, :]
+
+    gather_ids_dl = gather_ids.clone() #down left 
+    gather_ids_dl[0, :] = gather_ids_dl[0, :].floor()
+    gather_ids_dl[1, :] = gather_ids_dl[1, :].floor()
+
+    gather_ids_ul = gather_ids.clone() #up left 
+    gather_ids_ul[0, :] = gather_ids_ul[0, :].floor() + 1.0
+    gather_ids_ul[1, :] = gather_ids_ul[1, :].floor()
+
+    gather_ids_ur = gather_ids.clone() #up right
+    gather_ids_ur[0, :] = gather_ids_ur[0, :].floor() + 1.0
+    gather_ids_ur[1, :] = gather_ids_ur[1, :].floor() + 1.0
+
+    gather_ids_dr = gather_ids.clone() #down right 
+    gather_ids_dr[0, :] = gather_ids_dr[0, :].floor()
+    gather_ids_dr[1, :] = gather_ids_dr[1, :].floor() + 1.0
+
+    x_u = gather_ids_ul[0, :] #up 
+    x_d = gather_ids_dl[0, :] #down
+    y_r = gather_ids_dr[1, :] #right
+    y_l = gather_ids_dl[1, :] #left 
+
+    w_dl = (x_u - gather_ids[0]) * (y_r - gather_ids[1]) #/ (x_u - x_d) * (y_r - y_l) #down left weights, no need to divide since the volume is always 1  
+    w_ul = (gather_ids[0] - x_d) * (y_r - gather_ids[1]) #/ (x_u - x_d) * (y_r - y_l) #up left weights 
+    w_ur = (gather_ids[0] - x_d) * (gather_ids[1] - y_l) #/ (x_u - x_d) * (y_r - y_l) #up right weights 
+    w_dr = (x_u - gather_ids[0]) * (gather_ids[1] - y_l) #/ (x_u - x_d) * (y_r - y_l) #down right weights 
+
+    gather_ids_dl = gather_ids_dl.to(torch.int64)
+    gather_ids_ul = gather_ids_ul.to(torch.int64)
+    gather_ids_ur = gather_ids_ur.to(torch.int64)
+    gather_ids_dr = gather_ids_dr.to(torch.int64)
+
+    volume[:, scatter_ids[0], scatter_ids[1], scatter_ids[2]] =  w_dl * img[:, gather_ids_dl[0], gather_ids_dl[1]] \
+                                                                + w_ul * img[:, gather_ids_ul[0], gather_ids_ul[1]] \
+                                                                + w_ur * img[:, gather_ids_ur[0], gather_ids_ur[1]] \
+                                                                + w_dr * img[:, gather_ids_dr[0], gather_ids_dr[1]] \
+                                                                    
+    return volume
+
+def get_camera_mask(R, T, K, shift_x = 0.5, shift_y =0.5, theta = 45, H=448, W=896, sidelength = 64):
+    # shift x,y in range [-0.5, 0.5]
+    # theta in degrees
+    xyz = get_xyz_map(sidelength)
+    xyz[:,:,:,0] -= shift_x *56.3*2
+    xyz[:,:,:,1] += shift_y *56.3*2
+    
+    theta_rad = theta * torch.pi/ 180 ;theta_rad = torch.tensor(theta_rad)
+    rot_mat = torch.tensor([
+            [torch.cos(theta_rad), -torch.sin(theta_rad),0],
+            [torch.sin(theta_rad), torch.cos(theta_rad),0],
+            [0, 0, 1]
+        ])
+    xyz_rot_trans = rot_mat @ xyz.view(-1, 3).T; xyz = xyz_rot_trans.T.view(*xyz.shape)
+    
+    xyz_ids = get_xyz_ids(sidelength)
+    volume = torch.zeros(size=(1,*xyz.shape[:3]))
+    img = torch.ones(size=(1, H, W))
+    uvs, scatter_ids= render_xyz(R, T, K, xyz, xyz_ids, H, W)
+    volume = lift_features(img, volume, uvs, scatter_ids); volume = volume[0,:,:,0].ceil().to(torch.bool)
+    return volume
 
 
-def satimgtrans2satimgorig(shift_x, shift_y, theta, range_lat = 20, range_lot = 20, rotation_range=20):
+def satimgtrans2satimgorig(shift_x, shift_y, theta, range_lat = 20, range_lot = 20, rotation_range=20, Rs=None, Ts=None, Ks=None, H=448, W=896):
     """
     shift_x, shift_y, theta [-1,1] -> numpy.random
     """
@@ -353,8 +464,20 @@ def satimgtrans2satimgorig(shift_x, shift_y, theta, range_lat = 20, range_lot = 
     meters_xy_orig = rot_mat @ meters_xy.view(2, -1) + trans_mat
     meters_xy_orig = meters_xy_orig.view(2, sidelength, sidelength)
 
+    cameras_mask = None
+    for camera in Rs.keys():
+        R = Rs[camera]
+        T = Ts[camera]
+        K = Ks[camera]
+        if cameras_mask is None:
+            cameras_mask = get_camera_mask(R, T, K, shift_x_range, shift_y_range, theta * rotation_range, H, W, sidelength)
+        else:
+            cameras_mask = cameras_mask | get_camera_mask(R, T, K, shift_x_range, shift_y_range, theta * rotation_range, H, W, sidelength)
 
-    meters_mask = (meters_xy_orig[0] <= 0.5) & (meters_xy_orig[0] >= -0.5) & (meters_xy_orig[1] <= 0.5) & (meters_xy_orig[1] >= -0.5)
+    meters_mask = (meters_xy_orig[0] <= 0.5) & (meters_xy_orig[0] >= -0.5) & (meters_xy_orig[1] <= 0.5) & (meters_xy_orig[1] >= -0.5) 
+    meters_mask = meters_mask & cameras_mask
     meters_xy_dt = (meters_xy_orig - meters_xy) * meters_mask
 
     return meters_mask.long(), meters_xy_dt
+
+
