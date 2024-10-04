@@ -132,33 +132,34 @@ def qvec2angle(q0, q1, q2, q3):
 
 
 class SatGrdDatasetFord(Dataset):
-    def __init__(self, root=Ford_root, logs=train_logs, logs_img_inds=train_logs_img_inds,
-                 shift_range_lat=20, shift_range_lon=20, rotation_range=20, whole=False, H = 448, W = 896, cameras = ['FL'], mode = 'train'):
+    def __init__(self, root, logs, logs_img_inds, config, mode = 'train',
+                 whole=False):
+        
+        self.config = config
         self.root = root
-        self.cameras = cameras
-        self.shift_range_meters_lat = shift_range_lat  # in terms of meters
-        self.shift_range_meters_lon = shift_range_lon  # in terms of meters
+        # self.config.shift_range_lat = shift_range_lat  # in terms of meters
+        # self.config.shift_range_lon = shift_range_lon  # in terms of meters
         self.meters_per_pixel = 0.22
-        self.shift_range_pixels_lat = shift_range_lat / self.meters_per_pixel  # in terms of pixels
-        self.shift_range_pixels_lon = shift_range_lon / self.meters_per_pixel  # in terms of pixels
+        self.config.shift_range_pixels_lat = self.config.shift_range_lat / self.meters_per_pixel  # in terms of pixels
+        self.config.shift_range_pixels_lon = self.config.shift_range_lon / self.meters_per_pixel  # in terms of pixels
         self.mode = mode
 
-        self.rotation_range = rotation_range # in terms of degree
+        # self.config.rotation_range = rotation_range # in terms of degree
 
         self.satmap_dir = satmap_dir
         self.lat0 = 42.29424422604817  # 08-04-Log0-img0
 
         self.H_ori = 860 # original image dimenstions 
         self.W_ori = 1656
-        self.H = H # used by authors of bosting3dof # self.H = 256  # self.W = 1024
-        self.W = W
+        # self.config.net_in_img_H = H # used by authors of bosting3dof # self.H = 256  # self.W = 1024
+        # self.config.net_in_img_W = W
 
         self.file_names = {}
         self.Ks = {}
         self.Rs = {}
         self.Ts = {}
         df = data_file if mode == 'train' else data_file_test
-        for camera in cameras:
+        for camera in self.config.cameras:
             file_name = []
             for idx in range(len(logs)):
                 log = logs[idx]
@@ -208,8 +209,8 @@ class SatGrdDatasetFord(Dataset):
                 cfg_FL_in = CfgNode(cfg_dict)
             self.Ks[camera] = np.array(cfg_FL_in.K, dtype=np.float32).reshape([3, 3])
         
-            self.Ks[camera][0] = self.Ks[camera][0] / self.W_ori * self.W
-            self.Ks[camera][1] = self.Ks[camera][1] / self.H_ori * self.H
+            self.Ks[camera][0] = self.Ks[camera][0] / self.W_ori * self.config.net_in_img_W
+            self.Ks[camera][1] = self.Ks[camera][1] / self.H_ori * self.config.net_in_img_H
 
         self.sidelength = 512
         self.satmap_sidelength_meters = self.sidelength * self.meters_per_pixel
@@ -217,7 +218,7 @@ class SatGrdDatasetFord(Dataset):
             transforms.ToTensor(),
         ])
         self.grdimage_transform = transforms.Compose([
-            transforms.Resize(size=[self.H, self.W]),
+            transforms.Resize(size=[self.config.net_in_img_H, self.config.net_in_img_W]),
             transforms.ToTensor(),
         ])
 
@@ -272,18 +273,18 @@ class SatGrdDatasetFord(Dataset):
         sat_rand_shift = \
             sat_align_body_loc_orien.transform(
                 sat_align_body_loc_orien.size, Image.AFFINE,
-                (1, 0, gt_shift_u * self.shift_range_pixels_lat,
-                0, 1, gt_shift_v * self.shift_range_pixels_lon),
+                (1, 0, gt_shift_u * self.config.shift_range_pixels_lat,
+                0, 1, gt_shift_v * self.config.shift_range_pixels_lon),
                 resample=Image.BILINEAR)
 
         if self.mode == 'train':
             theta = np.random.uniform(-1, 1)
-        sat_rand_shift_rot = sat_rand_shift.rotate(theta * self.rotation_range)
+        sat_rand_shift_rot = sat_rand_shift.rotate(theta * self.config.rotation_range)
 
         sat_img = TF.center_crop(sat_rand_shift_rot, self.sidelength)
         sat_img = self.satmap_transform(sat_img)
 
-        for camera in self.cameras:
+        for camera in self.config.cameras:
             if self.mode == 'train':
                 grd_name, _, _, _, _, _, _, _, _, _ = self.file_names[camera][idx]
             else:
@@ -302,7 +303,7 @@ class SatGrdDatasetFord(Dataset):
         gt_shift_u = torch.tensor(gt_shift_u, dtype=torch.float32)
         gt_shift_v = torch.tensor(gt_shift_v, dtype=torch.float32)
         theta = torch.tensor(theta, dtype=torch.float32)
-        xy_dt_mask, xy_dt = satimgtrans2satimgorig(gt_shift_v, gt_shift_u, theta, self.shift_range_meters_lat, self.shift_range_meters_lon, self.rotation_range, self.Rs, self.Ts, self.Ks, self.H, self.W)
+        xy_dt_mask, xy_dt = satimgtrans2satimgorig(gt_shift_v, gt_shift_u, theta, self.config, self.Rs, self.Ts, self.Ks)
 
         return sat_img,\
                tuple(grd_imgs),\
@@ -434,19 +435,19 @@ def get_camera_mask(R, T, K, shift_x = 0.5, shift_y =0.5, theta = 45, H=448, W=8
     return volume
 
 
-def satimgtrans2satimgorig(shift_x, shift_y, theta, range_lat = 20, range_lot = 20, rotation_range=20, Rs=None, Ts=None, Ks=None, H=448, W=896):
+def satimgtrans2satimgorig(shift_x, shift_y, theta, config, Rs=None, Ts=None, Ks=None):
     """
     shift_x, shift_y, theta [-1,1] -> numpy.random
     """
-    meters_per_pixel = 0.22 # for satelite image of sidelength 512
-    sidelength_orig = 512
-    sidelength = 64
-    meters_xy = get_xy_map(sidelength)
+    
+
+    # for satelite image of sidelength 512
+    meters_xy = get_xy_map(config.sat_map_A)
 
     # create rotation and tranlation matrix
-    shift_x_range = (shift_x * range_lat) / (meters_per_pixel * sidelength_orig) # [-0.5, 0.5] top left corner of the image is -0.5,-0.5
-    shift_y_range = (shift_y * range_lot) / (meters_per_pixel * sidelength_orig) # [-0.5, 0.5] bottom left corner of the image is 0.5, -0.5
-    theta_rad = theta * rotation_range * torch.pi/ 180 
+    shift_x_range = (shift_x * config.shift_range_lat) / (config.meters_per_pixel * config.orig_satmap_A) # [-0.5, 0.5] top left corner of the image is -0.5,-0.5
+    shift_y_range = (shift_y * config.shift_range_lon) / (config.meters_per_pixel * config.orig_satmap_A) # [-0.5, 0.5] bottom left corner of the image is 0.5, -0.5
+    theta_rad = theta * config.rotation_range * torch.pi/ 180 
     theta_rad = torch.tensor(theta_rad)
 
     rot_mat = torch.tensor([
@@ -462,7 +463,7 @@ def satimgtrans2satimgorig(shift_x, shift_y, theta, range_lat = 20, range_lot = 
 
     #rotate and translate points to the original potition
     meters_xy_orig = rot_mat @ meters_xy.view(2, -1) + trans_mat
-    meters_xy_orig = meters_xy_orig.view(2, sidelength, sidelength)
+    meters_xy_orig = meters_xy_orig.view(2, config.sat_map_A, config.sat_map_A)
 
     cameras_mask = None
     for camera in Rs.keys():
@@ -470,9 +471,9 @@ def satimgtrans2satimgorig(shift_x, shift_y, theta, range_lat = 20, range_lot = 
         T = Ts[camera]
         K = Ks[camera]
         if cameras_mask is None:
-            cameras_mask = get_camera_mask(R, T, K, shift_x_range, shift_y_range, theta * rotation_range, H, W, sidelength)
+            cameras_mask = get_camera_mask(R, T, K, shift_x_range, shift_y_range, theta * config.rotation_range, config.net_in_img_H, config.net_in_img_W, config.sat_map_A)
         else:
-            cameras_mask = cameras_mask | get_camera_mask(R, T, K, shift_x_range, shift_y_range, theta * rotation_range, H, W, sidelength)
+            cameras_mask = cameras_mask | get_camera_mask(R, T, K, shift_x_range, shift_y_range, theta * config.rotation_range, config.net_in_img_H, config.net_in_img_W, config.sat_map_A)
 
     meters_mask = (meters_xy_orig[0] <= 0.5) & (meters_xy_orig[0] >= -0.5) & (meters_xy_orig[1] <= 0.5) & (meters_xy_orig[1] >= -0.5) 
     meters_mask = meters_mask & cameras_mask
